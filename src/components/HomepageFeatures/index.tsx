@@ -10,27 +10,25 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
+    title: 'Deploy you cluster quickly',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Get a cluster up and running in minutes will all the bells and whistles.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Keep an eye on what is happening',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Monitor you cluster with a simple web interface. Dashboards, workflows and alerts.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Easily scale your cluster',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
