@@ -1,0 +1,109 @@
+---
+id: kube-tools
+title: Kube Tools
+sidebar_label: 'Kube Tools'
+sidebar_position: 1
+tags:
+  - Kubernetes
+  - setup
+---
+
+# Kube Tools
+
+For the most part everything we are gonna do is independent of the cluster provider. 
+
+The best way to get started in so use minikube on you local pc to try out different kubernetes features. 
+
+## Minikube
+
+[Minikube](https://minikube.sigs.k8s.io/docs/) provides the user with a nearly full featured kubernetes cluster running on a vm on your local machine. 
+
+Its possible to use different vms with minikube but the most simple with windows is the integrated Hyper-V virtual machine. 
+
+You can fine the official install documentation from minikube here [install minikube](https://minikube.sigs.k8s.io/docs/start/) 
+
+### Hyper-V (For windows users)
+
+For windows users we can set Hyper-V as the default driver for minikube.
+```sh
+minikube config set driver hyperv
+```
+
+Or you can simply start minikube with hyper-v
+
+```sh"
+minikube start --driver=hyperv 
+```
+
+### Dashboard
+Minikube comes kube dashboard installed out of the box as a service it makes interacting with the cluster easier via a graphical interface. 
+
+You can start it using. 
+```sh
+minikube dashboard
+```
+
+
+### Cheat sheet
+
+Here are you most useful minikube commands.
+```sh
+# Start minikube
+minikube start
+
+# Stop minikube 
+minikube stop 
+
+# Pause Cluster
+minikube pause
+
+# Unpause cluster
+minikube unpause
+
+```
+
+
+
+
+---
+## Kubectl 
+
+Your most important tool for interacting with your kubernetes cluster is kubectl. It allows you to interact with the kubernetes api via the command line and is essential when deploying apps to you cluster or interacting with the cluster in general. 
+
+### Installation
+
+The easiest way to install kubectl on a windows machine is via Chocolatey(choco). 
+
+:::note
+
+If you don't have choco installed, simply open powershell as and administrator and enter the following. 
+
+```sh
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) 
+```
+
+To test that the installation was successful simply enter **choco**
+
+:::
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+
+<Tabs>
+  <TabItem value="Choco" label="Choco" default>
+
+````sh
+choco install kubernetes-cli
+````
+
+You can test the installation by running **kubeclt**
+
+  </TabItem>
+</Tabs>
+
+For auto complete in power-shell you can also run the following in power-shell 
+
+```sh title=powershell
+kubectl completion powershell | Out-String | Invoke-Expression
+```

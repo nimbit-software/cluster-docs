@@ -63,11 +63,7 @@ const config = {
             docId: 'getting-started',
             position: 'left',
             label: 'Docs',
-          },
-          {
-            type: 'docsVersionDropdown',
-            position: 'left',
-          },
+          }
         ],
       },
       footer: {
