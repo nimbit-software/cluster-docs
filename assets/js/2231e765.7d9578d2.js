@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkcluster_docs=self.webpackChunkcluster_docs||[]).push([[3139],{5319:e=>{e.exports=JSON.parse('{"permalink":"/cluster-docs/blog/tags/facebook","page":1,"postsPerPage":10,"totalPages":1,"totalCount":1,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);
