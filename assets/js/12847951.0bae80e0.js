@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkcluster_docs=self.webpackChunkcluster_docs||[]).push([[918],{856:s=>{s.exports=JSON.parse('{"label":"docker","permalink":"/cluster-docs/docs/tags/docker","allTagsPath":"/cluster-docs/docs/tags","count":1,"items":[{"id":"setup/docker","title":"Docker","description":"","permalink":"/cluster-docs/docs/setup/docker"}]}')}}]);

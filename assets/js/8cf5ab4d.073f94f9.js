@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkcluster_docs=self.webpackChunkcluster_docs||[]).push([[3632],{6425:s=>{s.exports=JSON.parse('{"label":"facebook","permalink":"/cluster-docs/blog/tags/facebook","allTagsPath":"/cluster-docs/blog/tags","count":1}')}}]);
