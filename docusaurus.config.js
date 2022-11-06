@@ -73,8 +73,12 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Tutorial',
-                to: '/docs/intro',
+                label: 'Getting started',
+                to: '/docs/getting-started',
+              },
+              {
+                label: 'Managed Cluster',
+                to: '/docs/managed-cluster/managed-cluster-setup',
               },
             ],
           },
