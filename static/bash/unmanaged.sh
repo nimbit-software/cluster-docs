@@ -73,3 +73,21 @@ spec:
         ingress:
           class:  nginx
 EOF
+
+
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: udp-services
+  namespace: ingress-nginx
+EOF
+
+
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tcp-services
+  namespace: ingress-nginx
+EOF
