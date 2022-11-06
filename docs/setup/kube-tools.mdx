@@ -107,3 +107,71 @@ For auto complete in power-shell you can also run the following in power-shell
 ```sh title=powershell
 kubectl completion powershell | Out-String | Invoke-Expression
 ```
+
+
+## Kube tools 
+
+Here are some of my favorite kubernetes tools that can make you life easier especially when dealing with
+multiple clusters.
+
+### Krew
+
+Krew is a great tool for managing and installing kubectl plugins. 
+You can find the installation information [here](https://krew.sigs.k8s.io/docs/user-guide/setup/install/#windows)
+
+After having installed Krew here are a few useful plugins:
+
+- cert-manager
+- get-all
+- ingress-nginx
+- config-cleanup
+- doctor
+- multiforward
+- deprecations
+
+Each of the plugins can be installed using the cli 
+
+```sh
+kubectl krew install <plugin>
+
+# Example
+kubectl krew install get-all
+```
+
+### Kubectx and Kubens
+
+[Kubectx](https://github.com/ahmetb/kubectx) is a great tool for managing the current context
+and allows you to quickly switch between kubernetes contexts.
+
+**Kubens** on the other hand allows you to quickly switch between namespaces without having to add the namespace with every command
+
+They can easily be installed using chocolatey
+
+```sh
+choco install kubens kubectx
+```
+
+
+### K9s 
+
+[K9s](https://github.com/derailed/k9s) offers a different type of interface for
+interacting with you cluster. It offers a terminal UI that you can use to easily navigate 
+your cluster and perform actions.
+
+For more details please view the github page.
+
+```sh
+choco install k9s
+```
+
+## Helm 
+
+[Helm](https://helm.sh/) is a package manager for kubernetes and allows us to deploy apps as a complete 
+bundle using a template mechanism. This allows us to easily adapt all aspects of the app
+to different customers simply by making changes to a values.yaml file
+
+The simplest way to install helm is once again with Chocolatey
+
+```sh
+choco install kubernetes-helm
+```

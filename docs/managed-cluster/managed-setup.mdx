@@ -1,0 +1,183 @@
+---
+id: managed-cluster-setup
+title: "Managed cluster setup"
+sidebar_label: 'Managed cluster setup'
+sidebar_position: 1
+tags:
+  - managed
+  - Initial setup
+  - setup
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Managed Cluster setup
+
+The managed cluster setup offers a step-by-step setup for a new kubernetes cluster. 
+
+Ideally the clusters should be managed by **argocd** but there is still some initial setup to be done to allow the cluster to communicate with the outside world. 
+
+
+We assume that you already have the cluster of you choice set up. To make sure you are using a fresh cluster run: 
+
+```sh
+kubeclt get namespaces
+```
+
+The output should look like this 
+
+```buttonless
+$ kubectl get namespaces
+NAME              STATUS   AGE
+default           Active   138d
+kube-node-lease   Active   40m
+kube-public       Active   138d
+kube-system       Active   138d
+```
+
+So now we have a clean cluster its time to get started.
+
+---
+
+## Nginx
+
+Most clusters want to allow users to access at least certain parts of it from outside the cluster. While we can expose specific node ports outside the cluster, a load balancer makes the most sense and allows us to have more control over our routes in a central place. 
+
+Load balancers expose the cluster to the outside world in a safe and manageable way while proving a lot of additional features
+
+While there are a few different load balancers out there we will be using the [NGINX](https://kubernetes.github.io/ingress-nginx/deploy/) load balancer. 
+
+We will be using helm to install nginx as it is the easiest way to get it up and running.
+
+```sh
+# WE WILL USE THE NAMESPACE ingress-nginx WHICH IS CREATED FOR US 
+
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
+  --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
+```
+
+A few pods should start in the ingress-nginx namespace:
+```sh
+kubectl get pods --namespace=ingress-nginx
+```
+
+After a while, they should all be running. The following command will wait for the ingress controller pod to be up, running, and ready:
+
+```sh
+kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=120s
+```
+
+:::caution
+  Some kubernetes environments require additional configuration before setting up the load balancer 
+:::
+
+<Tabs>
+  <TabItem value="Azure" label="Azure" default>
+
+````sh 
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/cloud/deploy.yaml
+````
+  </TabItem>
+</Tabs>
+
+## Load Balancer
+
+Having created the nginx ingress we can now create our generic load balancer.
+```
+kubectl apply -f - <<EOF
+kind: Service
+apiVersion: v1
+metadata:
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+    - name: https
+      port: 443
+      targetPort: https      
+EOF
+
+```
+
+You load balancer should be set up now with all the bells and whistles 
+
+
+## Cert Manager
+
+The cert manager is responsible for creating certificates for you apps and making sure that they are kept up to date. 
+
+We will be using lets encrypt for as our certification authority. 
+We will also be using helm to deploy our cert-manager
+
+Add helm repo and update repo
+```sh title="Add repo and update repo"
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+```
+
+
+Now we need to apply the custom resource definition (CRD)
+```sh 
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.0/cert-manager.crds.yaml
+```
+
+
+
+:::caution 
+If cert-manager already exists you can remove it using 
+
+```
+helm uninstall cert-manager --namespace cert-manager
+```
+:::
+
+
+
+
+Now let install cert manager
+
+```sh 
+helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.10.0  --create-namespace --set installCRDs=true
+
+```
+
+
+After setting up the cert manager we need to set up a cluster issuer. 
+The cluster issuer is responsible for creating certificates in all namespaces
+
+```sh title="Cluster issuer"
+kubectl apply -f - <<EOF
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: le-clusterissuer
+  namespace: cert-manager
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: iot@nimbit.de
+    privateKeySecretRef:
+      name: le-clusterissuer
+    solvers:
+    - http01:
+        ingress:
+          class:  nginx
+EOF
+         
+```
