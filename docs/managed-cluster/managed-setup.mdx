@@ -21,7 +21,7 @@ Ideally the clusters should be managed by **argocd** but there is still some ini
 
 We assume that you already have the cluster of you choice set up. To make sure you are using a fresh cluster run: 
 
-```sh
+```bash
 kubeclt get namespaces
 ```
 
@@ -50,7 +50,7 @@ While there are a few different load balancers out there we will be using the [N
 
 We will be using helm to install nginx as it is the easiest way to get it up and running.
 
-```sh
+```bash
 # WE WILL USE THE NAMESPACE ingress-nginx WHICH IS CREATED FOR US 
 
 helm upgrade --install ingress-nginx ingress-nginx \
@@ -60,13 +60,13 @@ helm upgrade --install ingress-nginx ingress-nginx \
 ```
 
 A few pods should start in the ingress-nginx namespace:
-```sh
+```bash
 kubectl get pods --namespace=ingress-nginx
 ```
 
 After a while, they should all be running. The following command will wait for the ingress controller pod to be up, running, and ready:
 
-```sh
+```bash
 kubectl wait --namespace ingress-nginx \
   --for=condition=ready pod \
   --selector=app.kubernetes.io/component=controller \
@@ -80,7 +80,7 @@ kubectl wait --namespace ingress-nginx \
 <Tabs>
   <TabItem value="Azure" label="Azure" default>
 
-````sh 
+````bash 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/cloud/deploy.yaml
 ````
   </TabItem>
@@ -126,14 +126,14 @@ We will be using lets encrypt for as our certification authority.
 We will also be using helm to deploy our cert-manager
 
 Add helm repo and update repo
-```sh title="Add repo and update repo"
+```bash title="Add repo and update repo"
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
 ```
 
 
 Now we need to apply the custom resource definition (CRD)
-```sh 
+```bash 
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.0/cert-manager.crds.yaml
 ```
 
@@ -152,7 +152,7 @@ helm uninstall cert-manager --namespace cert-manager
 
 Now let install cert manager
 
-```sh 
+```bash 
 helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.10.0  --create-namespace --set installCRDs=true
 
 ```
@@ -161,7 +161,7 @@ helm install cert-manager jetstack/cert-manager --namespace cert-manager --versi
 After setting up the cert manager we need to set up a cluster issuer. 
 The cluster issuer is responsible for creating certificates in all namespaces
 
-```sh title="Cluster issuer"
+```bash title="Cluster issuer"
 kubectl apply -f - <<EOF
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -183,7 +183,7 @@ EOF
 ```
 
 
-```sh
+```bash
 kubectl apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
@@ -196,7 +196,7 @@ EOF
 
 
 
-```sh
+```bash
 kubectl apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap

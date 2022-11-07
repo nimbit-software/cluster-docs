@@ -25,13 +25,13 @@ You can fine the official install documentation from minikube here [install mini
 ### Hyper-V (For windows users)
 
 For windows users we can set Hyper-V as the default driver for minikube.
-```sh
+```bash
 minikube config set driver hyperv
 ```
 
 Or you can simply start minikube with hyper-v
 
-```sh"
+```bash"
 minikube start --driver=hyperv 
 ```
 
@@ -39,7 +39,7 @@ minikube start --driver=hyperv
 Minikube comes kube dashboard installed out of the box as a service it makes interacting with the cluster easier via a graphical interface. 
 
 You can start it using. 
-```sh
+```bash
 minikube dashboard
 ```
 
@@ -47,7 +47,7 @@ minikube dashboard
 ### Cheat sheet
 
 Here are you most useful minikube commands.
-```sh
+```bash
 # Start minikube
 minikube start
 
@@ -78,7 +78,7 @@ The easiest way to install kubectl on a windows machine is via Chocolatey(choco)
 
 If you don't have choco installed, simply open powershell as and administrator and enter the following. 
 
-```sh
+```bash
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) 
 ```
 
@@ -93,7 +93,7 @@ import TabItem from '@theme/TabItem';
 <Tabs>
   <TabItem value="Choco" label="Choco" default>
 
-````sh
+````bash
 choco install kubernetes-cli
 ````
 
@@ -104,7 +104,7 @@ You can test the installation by running **kubeclt**
 
 For auto complete in power-shell you can also run the following in power-shell 
 
-```sh title=powershell
+```bash title=powershell
 kubectl completion powershell | Out-String | Invoke-Expression
 ```
 
@@ -131,7 +131,7 @@ After having installed Krew here are a few useful plugins:
 
 Each of the plugins can be installed using the cli 
 
-```sh
+```bash
 kubectl krew install <plugin>
 
 # Example
@@ -147,7 +147,7 @@ and allows you to quickly switch between kubernetes contexts.
 
 They can easily be installed using chocolatey
 
-```sh
+```bash
 choco install kubens kubectx
 ```
 
@@ -160,7 +160,7 @@ your cluster and perform actions.
 
 For more details please view the github page.
 
-```sh
+```bash
 choco install k9s
 ```
 
@@ -172,6 +172,6 @@ to different customers simply by making changes to a values.yaml file
 
 The simplest way to install helm is once again with Chocolatey
 
-```sh
+```bash
 choco install kubernetes-helm
 ```

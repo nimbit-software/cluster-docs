@@ -24,6 +24,6 @@ This script will deploy the following
 - Cluster issuer 
 - Config maps (empty) for udp and tcp services
 
-```sh
+```bash
 curl -sL https://raw.githubusercontent.com/nimbit-software/cluster-docs/master/static/bash/unmanaged.sh | bash        
 ```
