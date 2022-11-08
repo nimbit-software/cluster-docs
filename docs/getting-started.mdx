@@ -1,0 +1,42 @@
+---
+id: getting-started
+title: Getting started
+sidebar_label: 'Getting Started'
+sidebar_position: 1
+tags:
+  - Getting started
+---
+
+import ClusterDesc from '@site/static/img/argocd-mang.webp';
+
+# Cluster docs
+
+Welcome to the cluster docs. 
+The goal here is to provide a set by set guide for setting up an managing a nimbit Kubernetes cluster along with documenting all steps needed to get you up and running. 
+
+This is a living documentation and will be updated step by step as new apps and features are added to the cluster.
+
+
+## Cluster architecture
+
+Our goal is to use argocd to manage all apps deployed on our clusters. 
+
+In order to separate concerns we will create a management cluster where we will install some management and monitoring apps. From there we will create, deploy, monitor and manage further clusters.
+
+Some of the components that should be installed on the Management cluster include:
+- Argocd
+- Rancher
+
+
+### Overview
+<img src={ClusterDesc} />
+
+After the management cluster has been set up every subsequent cluster should be setup with Rancher where possible. 
+
+If it is not possible then the cluster should be imported by rancher after creation. 
+
+
+After that all clusters should be added to argocd for git based deployments. 
+
+For further information see [Management Cluster](/docs/management-cluster/mc-overview)
+

@@ -1,6 +1,6 @@
 {
-  "label": "Apps",
-  "position": 6,
+  "label": "Management Cluster",
+  "position": 4,
   "link": {
     "type": "generated-index"
   }

@@ -1,0 +1,52 @@
+---
+id: argocd-overview
+title: "Overview"
+sidebar_label: 'Overview'
+sidebar_position: 1
+tags:
+  - Argocd
+---
+import ArgocdArchitecture from '@site/static/img/argocd_architecture.webp';
+
+# Argocd
+
+Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.
+
+[Docs](https://argo-cd.readthedocs.io/en/stable/)
+
+### Why Argo CD?
+
+Application definitions, configurations, and environments should be declarative and version controlled. Application deployment and lifecycle management should be automated, auditable, and easy to understand.
+
+### How it works
+Argo CD follows the GitOps pattern of using Git repositories as the source of truth for defining the desired application state. Kubernetes manifests can be specified in several ways:
+- [kustomize](https://kustomize.io/) applications
+- [helm](https://helm.sh/) charts
+- [jsonnet](https://jsonnet.org/) files
+- Plain directory of YAML/json manifests
+- Any custom config management tool configured as a config management plugin
+
+### Architecture
+<img src={ArgocdArchitecture} />;
+
+### Core Concepts
+
+Let's assume you're familiar with core Git, Docker, Kubernetes, Continuous Delivery, and GitOps concepts. Below are some of the concepts that are specific to Argo CD.
+
+- **Application** A group of Kubernetes resources as defined by a manifest. This is a Custom Resource Definition (CRD).
+- **Application source type** Which Tool is used to build the application.
+- **Target state** The desired state of an application, as represented by files in a Git repository.
+- **Live state** The live state of that application. What pods etc are deployed.
+- **Sync status** Whether or not the live state matches the target state. Is the deployed application the same as Git says it should be?
+- **Sync** The process of making an application move to its target state. E.g. by applying changes to a Kubernetes cluster.
+- **Sync operation status** Whether or not a sync succeeded.
+- **Refresh** Compare the latest code in Git with the live state. Figure out what is different.
+- **Health** The health of the application, is it running correctly? Can it serve requests?
+- **Tool** A tool to create manifests from a directory of files. E.g. Kustomize. **See Application Source Type**.
+- **Configuration management tool** See Tool.
+- **Configuration management plugin** A custom tool.
+
+
+## Further info
+
+For more infos on core docker/helm/container features read the docs [understand the basics](https://argo-cd.readthedocs.io/en/stable/understand_the_basics/)
