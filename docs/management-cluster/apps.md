@@ -8,7 +8,7 @@ tags:
 ---
 
 # Apps
-The management cluster starts with the same setup as the [managed cluster](/docs/managed-cluster/managed-cluster-setup) and then we proceed to add additional apps
+The management cluster starts with the same setup as the [managed cluster](/docs/cluster/managed-cluster-setup) and then we proceed to add additional apps
 
 ## Rancher
 

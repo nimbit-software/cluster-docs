@@ -40,7 +40,7 @@ So now we have a clean cluster its time to get started.
 
 ---
 
-## Nginx
+## Nginx & Load Balancer v1.5.1
 
 Most clusters want to allow users to access at least certain parts of it from outside the cluster. While we can expose specific node ports outside the cluster, a load balancer makes the most sense and allows us to have more control over our routes in a central place. 
 
@@ -50,32 +50,6 @@ While there are a few different load balancers out there we will be using the [N
 
 We will be using helm to install nginx as it is the easiest way to get it up and running.
 
-```bash
-# WE WILL USE THE NAMESPACE ingress-nginx WHICH IS CREATED FOR US 
-
-helm upgrade --install ingress-nginx ingress-nginx \
-  --repo https://kubernetes.github.io/ingress-nginx \
-  --namespace ingress-nginx --create-namespace
-  --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
-```
-
-A few pods should start in the ingress-nginx namespace:
-```bash
-kubectl get pods --namespace=ingress-nginx
-```
-
-After a while, they should all be running. The following command will wait for the ingress controller pod to be up, running, and ready:
-
-```bash
-kubectl wait --namespace ingress-nginx \
-  --for=condition=ready pod \
-  --selector=app.kubernetes.io/component=controller \
-  --timeout=120s
-```
-
-:::caution
-  Some kubernetes environments require additional configuration before setting up the load balancer 
-:::
 
 <Tabs>
   <TabItem value="Azure" label="Azure" default>
@@ -83,39 +57,35 @@ kubectl wait --namespace ingress-nginx \
 ````bash 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/cloud/deploy.yaml
 ````
+  </TabItem>  
+<TabItem value="GKE" label="GKE" default>
+First, your user needs to have cluster-admin permissions on the cluster. This can be done with the following command:
+
+````bash 
+kubectl create clusterrolebinding cluster-admin-binding \
+  --clusterrole cluster-admin \
+  --user $(gcloud config get-value account)
+````
+Then, the ingress controller can be installed like this:
+````bash 
+kubectl create clusterrolebinding cluster-admin-binding \
+  --clusterrole cluster-admin \
+  --user $(gcloud config get-value account)
+````
   </TabItem>
+
 </Tabs>
 
-## Load Balancer
+:::info
+If we want to increase the replica count of our ingress controller this can be done by modifying the deployment.
 
-Having created the nginx ingress we can now create our generic load balancer.
+```bash title="Increase replicas"
+kubectl scale --replicas=2 deployment ingress-nginx-controller -n ingress-nginx
 ```
-kubectl apply -f - <<EOF
-kind: Service
-apiVersion: v1
-metadata:
-  name: ingress-nginx-controller
-  namespace: ingress-nginx
-  labels:
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/part-of: ingress-nginx
-spec:
-  type: LoadBalancer
-  selector:
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/part-of: ingress-nginx
-  ports:
-    - name: http
-      port: 80
-      targetPort: http
-    - name: https
-      port: 443
-      targetPort: https      
-EOF
+:::
 
-```
 
-You load balancer should be set up now with all the bells and whistles 
+Your ingress controller and load balancer should be set up now with all the bells and whistles 
 
 
 ## Cert Manager

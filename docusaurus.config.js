@@ -78,7 +78,7 @@ const config = {
               },
               {
                 label: 'Managed Cluster',
-                to: '/docs/managed-cluster/managed-cluster-setup',
+                to: '/docs/cluster/managed-cluster-setup',
               },
             ],
           },

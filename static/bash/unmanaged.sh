@@ -5,15 +5,8 @@ echo "Deploying cluster"
 
 
 echo "Deploying Nginx via helm charts"
-helm upgrade --install ingress-nginx ingress-nginx \
-  --repo https://kubernetes.github.io/ingress-nginx \
-  --namespace ingress-nginx --create-namespace
-  --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
-
-# AZURE SPECIFIC PATCHES
-
-echo "Applying nginx patches for azure"
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/cloud/deploy.yaml
+# AZURE SPECIFIC PATCHES
 
 echo "Deploying load balancer"
 kubectl apply -f - <<EOF
