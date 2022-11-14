@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkcluster_docs=self.webpackChunkcluster_docs||[]).push([[3023],{7375:s=>{s.exports=JSON.parse('{"title":"Apps","slug":"/category/apps","permalink":"/cluster-docs/docs/category/apps","navigation":{"previous":{"title":"OCB DB","permalink":"/cluster-docs/docs/databases/ocb-db"},"next":{"title":"Operators","permalink":"/cluster-docs/docs/apps/"}}}')}}]);
