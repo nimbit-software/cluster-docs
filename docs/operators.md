@@ -64,6 +64,18 @@ postgres-operator-9dd545d64-t4h8d   1/1     Running   0          3s
 Before creating a postgres cluster we will first create the other operators. All the PGO docs can be found [here](https://access.crunchydata.com/documentation/postgres-operator/v5/quickstart/)
 
 
+:::info
+It would be a very good idea to install the PGO monitoring tools to be able to keep an eye on the database and what is going on 
+
+From the existing crunchy git repo we can run: 
+```bash title="PGO monitoring"
+kubectl apply -k kustomize/monitoring
+```
+
+This will spin up the monitoring tools including the grafana dashboards.
+:::
+
+
 
 ## Keycloak Operator V20
 
