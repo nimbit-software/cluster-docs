@@ -1,6 +1,6 @@
 ---
 id: argocd-getting-started
-title: "Getting started"
+title: Getting started
 sidebar_label: 'Getting started'
 sidebar_position: 2
 tags:
@@ -11,7 +11,7 @@ tags:
 
 To be able to interact with argocd in the cluster we need to install the argocd cli. For that we can once again use Chocolaty 
 
-```bash title="Argocd cli"
+```bash title=Argocd cli
 choco install argocd-cli
 ```
 
@@ -23,13 +23,13 @@ If we are not using an Ingress we will either have to forward the port using por
 If you have not set a new admin password for argocd then the password is stored in a secret called argocd-secret we can get the password using kubectl:
 
 ```bash 
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath={.data.password} | base64 -d; echo
 ```
 
 Or we can store it in a variable to be used when logging in 
 
 ```bash 
-export ARGO_PWD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d;
+export ARGO_PWD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath={.data.password} | base64 -d;
  echo)
 ```
 :::
@@ -37,7 +37,7 @@ export ARGO_PWD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o js
 
 With our password we can now login
 
-```bash title="login" 
+```bash title=login 
 # For our first login we will us the username admin
 export ARGO_HOST=argocd.azure.nimbit.de
 
@@ -77,7 +77,7 @@ Flags:
       --auth-token string               Authentication token
       --client-crt string               Client certificate file
       --client-crt-key string           Client certificate key file
-      --config string                   Path to Argo CD config (default "C:\\Users\\sooter/.config/argocd/config")
+      --config string                   Path to Argo CD config (default C:\\Users\\sooter/.config/argocd/config)
       --core                            If set to true then CLI talks directly to Kubernetes instead of talking to Argo CD API server
       --grpc-web                        Enables gRPC-web protocol. Useful if Argo CD server is behind proxy which does not support HTTP2.
       --grpc-web-root-path string       Enables gRPC-web protocol. Useful if Argo CD server is behind proxy which does not support HTTP2. Set web root.
@@ -86,15 +86,15 @@ Flags:
       --http-retry-max int              Maximum number of retries to establish http connection to Argo CD server
       --insecure                        Skip server certificate and domain verification
       --kube-context string             Directs the command to the given kube-context
-      --logformat string                Set the logging format. One of: text|json (default "text")
-      --loglevel string                 Set the logging level. One of: debug|info|warn|error (default "info")
+      --logformat string                Set the logging format. One of: text|json (default text)
+      --loglevel string                 Set the logging level. One of: debug|info|warn|error (default info)
       --plaintext                       Disable TLS
       --port-forward                    Connect to a random argocd-server port using port forwarding
       --port-forward-namespace string   Namespace name which should be used for port forwarding
       --server string                   Argo CD server address
       --server-crt string               Server certificate file
 
-Use "argocd [command] --help" for more information about a command.
+Use argocd [command] --help for more information about a command.
 ```
 
 
@@ -149,10 +149,10 @@ Here is an example config for a project. Alternatively you can use the UI to cre
 The example used wildcards for the whitelist but in a productive scenario it should be limited to a specific destination
 :::
 
-```bash title="Create Project"
+```bash title=Create Project
 
 export PROJECT_NAME=my-project
-export PROJECT_DESC="My project description"
+export PROJECT_DESC=My project description
 export PROJECT_SERVER=https://kubernetes.default.svc
 export PROJECT_SOURCE_REPO=https://davidsooter@bitbucket.org/nimbit-iot/cluster-content.git
 
@@ -247,3 +247,27 @@ spec:
 EOF
 
 ```
+
+
+## Kustomized Helm 
+
+```bash 
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+data:
+  configManagementPlugins: |
+    - name: kustomized-helm
+      init:
+        command: [/bin/sh, -c]
+        args: [helm dependency build || true]
+      generate:
+        command: [/bin/sh, -c]
+        args: [helm template . --name-template $ARGOCD_APP_NAME --namespace $ARGOCD_APP_NAMESPACE --include-crds > all.yaml && kustomize build]
+EOF
+
+```
+
