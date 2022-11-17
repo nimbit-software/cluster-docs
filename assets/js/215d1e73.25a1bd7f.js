@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkcluster_docs=self.webpackChunkcluster_docs||[]).push([[52],{3242:s=>{s.exports=JSON.parse('{"label":"AWS","permalink":"/cluster-docs/docs/tags/aws","allTagsPath":"/cluster-docs/docs/tags","count":1,"items":[{"id":"providers/providers-aws","title":"AWS","description":"Cluster access","permalink":"/cluster-docs/docs/providers/providers-aws"}]}')}}]);
