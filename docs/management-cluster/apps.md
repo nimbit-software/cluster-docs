@@ -54,8 +54,8 @@ helm install rancher rancher-$RANCHER_CHART_REPO/rancher \
   --version=$RANCHER_VERSION
   --set ingress.tls.source=letsEncrypt \
   --set letsEncrypt.email=$RANCHER_LE_EMAIL \
-  --set letsEncrypt.ingress.class=nginx
-  --set ingress.ingressClassName=nginx
+  --set letsEncrypt.ingress.class=nginx \
+  --set ingress.ingressClassName=nginx \
   --set ingress.extraAnnotations.'kubernetes\.io/ingress\.class'=nginx
 ```
 
