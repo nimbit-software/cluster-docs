@@ -51,7 +51,7 @@ helm install rancher rancher-$RANCHER_CHART_REPO/rancher \
   --namespace cattle-system \
   --set hostname=$RANCHER_HOST \
   --set replicas=3 \
-  --version=$RANCHER_VERSION
+  --version=$RANCHER_VERSION \
   --set ingress.tls.source=letsEncrypt \
   --set letsEncrypt.email=$RANCHER_LE_EMAIL \
   --set letsEncrypt.ingress.class=nginx \
