@@ -43,6 +43,14 @@ Then we can import the different config details into our .kube/config file
 aws eks --region <region> update-kubeconfig --name <cluster-name>
 ```
 
+:::info 
+You can **rename your contexts** for better readabillity by using 
+```bash 
+# CHANGE CONTEXT NAME
+kubectl config rename-context old-name new-name 
+```
+:::
+
 
 :::info 
 If you installed **kubectx** you can now view the your context using 
