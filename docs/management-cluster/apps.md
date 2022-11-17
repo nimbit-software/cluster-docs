@@ -16,7 +16,7 @@ Lets install rancher:
 
 Thankfully we can use helm. Lets add the repos 
 ```bash 
-helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
 
 helm repo update
 ```
