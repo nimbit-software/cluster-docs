@@ -44,9 +44,10 @@ Further details for the install can be found [here](https://docs.ranchermanager.
 export RANCHER_VERSION=2.6.9
 export RANCHER_HOST=myhost.com
 export RANCHER_LE_EMAIL=iot@nimbit.de
+export RANCHER_CHART_REPO=stable
 
 
-helm install rancher rancher-<CHART_REPO>/rancher \
+helm install rancher rancher-$RANCHER_CHART_REPO/rancher \
   --namespace cattle-system \
   --set hostname=$RANCHER_HOST \
   --set replicas=3 \
