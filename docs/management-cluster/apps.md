@@ -45,17 +45,17 @@ export RANCHER_VERSION=2.6.9
 export RANCHER_HOST=myhost.com
 export RANCHER_LE_EMAIL=iot@nimbit.de
 export RANCHER_CHART_REPO=stable
-
+export RANCHER_PASSWORD=admin
 
 helm install rancher rancher-$RANCHER_CHART_REPO/rancher \
   --namespace cattle-system \
   --set hostname=$RANCHER_HOST \
   --set replicas=3 \
   --version=$RANCHER_VERSION \
+  --set bootstrapPassword=$RANCHER_PASSWORD \
   --set ingress.tls.source=letsEncrypt \
   --set letsEncrypt.email=$RANCHER_LE_EMAIL \
   --set letsEncrypt.ingress.class=nginx \
-  --set ingress.ingressClassName=nginx \
   --set ingress.extraAnnotations.'kubernetes\.io/ingress\.class'=nginx
 ```
 
@@ -153,6 +153,31 @@ EOF
 
 ```
 :::
+
+### Kustomize helm 
+To be able to use Kustomize to modify helm charts we can define a new plugin via a config map
+
+```bash title="Kustomize helm"
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: argocd
+data:
+  configManagementPlugins: |
+    - name: kustomized-helm
+      init:
+        command: ["/bin/sh", "-c"]
+        args: ["helm dependency build || true"]
+      generate:
+        command: ["/bin/sh", "-c"]
+        args: ["helm template . --name-template  --namespace  --include-crds > all.yaml && kustomize build"]
+EOF
+
+```
 
 
 ## Monitoring 

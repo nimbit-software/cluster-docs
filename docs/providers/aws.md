@@ -59,3 +59,42 @@ If you installed **kubectx** you can now view the your context using
 kubectx 
 ```
 :::
+
+
+## Creating a cluster
+
+The most efficient way to create a cluster is to use the eksctl tool 
+
+And we can use choco to install it 
+```bash title="install eksctl"
+choco install -y eksctl 
+```
+
+Now with that installed we can create our cluster. 
+This command will create a new cluster with all the needed node groups.
+
+```bash title="create cluster"
+# This can be adapted as needed for more details see the help
+# eksctl --help 
+
+
+eksctl create cluster \
+    --name admin \ 
+    --region eu-central-1 \
+    --version 1.23 \ 
+    --nodegroup-name admin \
+    --node-type t3.large \
+    --nodes 3
+```
+
+
+## Routing
+
+:::warning
+Unlike other clusters AWS create a public DNS name and not an IP this requires us to handle routing into the cluster slightly different. 
+
+**Steps**
+
+1. **DNS setting**: In you dns provider we need to create a cname entry to forward the request coming in to a specific dns name to the AWS dns 
+2. **Route 53**: In Aws Navigate to the Route 53 service and under hosted zones we need to add our domain as a hosted zone. It is enough to define the root dns name  
+:::
