@@ -258,6 +258,8 @@ kind: ConfigMap
 metadata:
   name: argocd-cm
   namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: argocd
 data:
   configManagementPlugins: |
     - name: kustomized-helm
