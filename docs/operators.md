@@ -96,8 +96,7 @@ kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-k8s-resourc
 
 Now let verify its running: 
 ```bash 
-kubectl -n operators get pods   --selector=app.kubernetes.io/name=keycloak-operator   --field-selector=status.phase=Ru
-nning
+kubectl -n operators get pods   --selector=app.kubernetes.io/name=keycloak-operator   --field-selector=status.phase=Running
 ```
 
 You should see something like: 
