@@ -8,7 +8,13 @@ tags:
   - Initial setup
   - setup
 ---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Unmanaged Cluster setup
+
+
 
 Deploy the basic cluster setup with a single shell script. 
 
@@ -23,7 +29,14 @@ This script will deploy the following
 - Cert-Manager
 - Cluster issuer 
 - Config maps (empty) for udp and tcp services
+- Storage classes
 
-```bash
-curl -sL https://raw.githubusercontent.com/nimbit-software/cluster-docs/master/static/bash/unmanaged.sh | bash        
-```
+<Tabs>
+<TabItem value="azure" label="Azure" default>
+
+````bash
+  curl -sL https://raw.githubusercontent.com/nimbit-software/cluster-docs/master/static/bash/unmanaged-azure.sh | bash  
+````
+
+</TabItem>
+</Tabs>

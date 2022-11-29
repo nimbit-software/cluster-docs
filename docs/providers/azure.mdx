@@ -1,0 +1,117 @@
+---
+id: providers-azure
+title: Azure
+sidebar_label: 'Azure'
+sidebar_position: 1
+tags:
+  - Azure
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Azure
+
+
+## Cluster access 
+
+### Install azure cli 
+
+In order to be able to import he cluster config we need to install the cli
+
+<Tabs>
+  <TabItem value="windows" label="Windows" default>
+
+````bash title=powershell
+  $ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; rm .\AzureCLI.msi
+````
+
+  </TabItem> 
+</Tabs>  
+
+
+After installing the azure cli we need to add the AKS plugins 
+```bash title='aks plugins'
+az aks install-cli
+```
+
+Now we are all set 
+
+
+### Get Cluster config 
+
+To get our cluster config we first need to login to azure 
+
+```bash title=login
+az login
+```
+
+This will open a login window where we can perform the login.
+
+Configure kubectl to connect to your Kubernetes cluster using the [az aks get-credentials](https://learn.microsoft.com/en-us/cli/azure/aks#az-aks-get-credentials) command. The following command:
+
+Downloads credentials and configures the Kubernetes CLI to use them.
+Uses ~/.kube/config, the default location for the [Kubernetes configuration](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) file. Specify a different location for your Kubernetes configuration file using --file argument.
+
+```bash title="azure cli"
+az aks get-credentials --resource-group <myResourceGroup> --name <myAKSCluster>
+```
+
+
+
+## Creating a cluster
+
+The easiest way to create a cluster is to use the cli 
+
+Here is a basic example of how to create cluster. There are many more options available for more details see the [AKS docs](https://learn.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-create)
+
+```bash
+az aks create \
+  -g myResourceGroup \ 
+  -n myAKSCluster \ 
+  --enable-managed-identity \
+  --node-count 1 \
+  --node-vm-size Standard_DS2_v2 \
+  --enable-addons monitoring \
+  --enable-msi-auth-for-monitoring  \
+  --kubernetes-version 1.24.6  \
+  --generate-ssh-keys
+```
+
+
+
+## Storage classes
+
+Storage classes are important when using persistent volumes. Azure provides a wide variety of storage classes when the cluster is created, but the standard reclaim policy is always set to delete. If we want our volume to remain after the pod has been deleted then we need to create our own storage classes.
+
+We will be defining two storage classes.
+- managed-csi-retain
+- managed-csi-premium-retain
+
+```bash title="storage classes"
+kubectl apply -f - <<EOF
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: managed-csi-premium-retain
+allowVolumeExpansion: true
+parameters:
+  skuname: Premium_LRS
+provisioner: disk.csi.azure.com
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: managed-csi-retain
+allowVolumeExpansion: true
+parameters:
+  skuname: StandardSSD_LRS
+provisioner: disk.csi.azure.com
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer
+
+
+EOF
+
+```

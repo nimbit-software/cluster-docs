@@ -2,7 +2,7 @@
 id: providers-aws
 title: AWS
 sidebar_label: 'AWS'
-sidebar_position: 1
+sidebar_position: 2
 tags:
   - AWS
 ---
