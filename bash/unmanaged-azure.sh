@@ -5,7 +5,7 @@ echo "Deploying cluster"
 
 
 echo "Deploying Nginx via helm charts"
-kubectl apply -f kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/cloud/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/cloud/deploy.yaml
 
 echo "Scaling replicas to nginx 2"
 kubectl scale --replicas=2 deployment ingress-nginx-controller -n ingress-nginx
