@@ -149,6 +149,31 @@ EOF
 
 ```
 
+## Redis Cluster Issuer
+```bash title="Redis Cluster Issuer"
+kubectl apply -f - <<EOF
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned-issuer
+  namespace: cert-manager
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: redis-tls-ca
+  namespace: cert-manager
+spec:
+  ca:
+    secretName: redis-tls-ca-cert
+EOF
+
+```
+
+## TCP Config maps
 
 ```bash
 kubectl apply -f - <<EOF
